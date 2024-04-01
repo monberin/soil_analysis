@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GroupKFold
 
 def create_images_list(directory_path, img_resolution,grayscale=False):
   images_list = []
@@ -54,3 +55,25 @@ def scale_fit_transform(o_y_train,o_y_val):
   train = scaler.fit_transform(o_y_train)
   val = scaler.transform(o_y_val)
   return train,val
+
+def extract_transform(vdf,val_name,labels):
+  arr = [float(vdf.loc[vdf['Sample'] == el][val_name].values[0]) for el in labels]
+  data = np.array(arr).reshape(-1, 1)
+  return data
+
+def custom_kfold_split(X_list,y_list,sample_names):
+  d = {}
+  groups = np.array([d.setdefault(x[:-1], len(d)) for x in sample_names])
+
+  kf = GroupKFold(n_splits=5)
+
+  kf.get_n_splits(X_list,y_list,groups)
+
+  splits = []
+  for i, (train_index, test_index) in enumerate(kf.split(X_list, y_list, groups)):
+     print(f"Fold {i}:")
+     print(f"  Train: group={set(groups[train_index])}")
+     print(f"  Test:  group={set(groups[test_index])}")
+     splits.append((train_index,test_index))
+
+  return splits
