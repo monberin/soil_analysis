@@ -30,11 +30,11 @@ def build_custom(input_shape,dense_units,dropout,learning_rate,data_augmentation
 
 def build_vgg(input_shape,dense_units,dropout,learning_rate,data_augmentation=True,pretrained_weights=True):
   model = models.Sequential()
-  model.add(layers.Lambda(tensorflow.keras.applications.vgg16.preprocess_input, input_shape=input_shape))
   if data_augmentation:
     model.add(layers.RandomFlip(mode="horizontal_and_vertical"))
     model.add(layers.RandomRotation(1.0))
   if pretrained_weights:
+    model.add(layers.Lambda(tensorflow.keras.applications.vgg16.preprocess_input, input_shape=input_shape))
     model.add(VGG16(include_top=False,input_shape=input_shape, weights='imagenet'))
   else:
     model.add(VGG16(include_top=False,input_shape=input_shape, weights=None))
@@ -52,11 +52,11 @@ def build_vgg(input_shape,dense_units,dropout,learning_rate,data_augmentation=Tr
 
 def build_resnet(input_shape,dense_units,dropout,learning_rate,data_augmentation=True,pretrained_weights=True):
   model = models.Sequential()
-  model.add(layers.Lambda(tensorflow.keras.applications.resnet50.preprocess_input, input_shape=input_shape))
   if data_augmentation:
     model.add(layers.RandomFlip(mode="horizontal_and_vertical"))
     model.add(layers.RandomRotation(1.0))
   if pretrained_weights:
+    model.add(layers.Lambda(tensorflow.keras.applications.resnet50.preprocess_input, input_shape=input_shape))
     model.add(ResNet50(include_top=False,input_shape=input_shape, weights='imagenet'))
   else:
     model.add(ResNet50(include_top=False,input_shape=input_shape, weights=None))
@@ -75,12 +75,12 @@ def build_resnet(input_shape,dense_units,dropout,learning_rate,data_augmentation
 
 def build_inception(input_shape,dense_units,dropout,learning_rate,data_augmentation=True,pretrained_weights=True):
   model = models.Sequential()
-  model.add(layers.Lambda(tensorflow.keras.applications.inception_v3.preprocess_input, input_shape=input_shape))
   if data_augmentation:
     model.add(layers.RandomFlip(mode="horizontal_and_vertical"))
     model.add(layers.RandomRotation(1.0))
   if pretrained_weights:
-   inception = InceptionV3(include_top=False,input_shape=input_shape, weights='imagenet')
+    model.add(layers.Lambda(tensorflow.keras.applications.inception_v3.preprocess_input, input_shape=input_shape))
+    inception = InceptionV3(include_top=False,input_shape=input_shape, weights='imagenet')
   else:
     inception = InceptionV3(include_top=False,input_shape=input_shape, weights=None)
   for layer in inception.layers:
@@ -98,11 +98,11 @@ def build_inception(input_shape,dense_units,dropout,learning_rate,data_augmentat
 
 def build_densenet(input_shape,dense_units,dropout,learning_rate,data_augmentation=True,pretrained_weights=True):
   model = models.Sequential()
-  model.add(layers.Lambda(tensorflow.keras.applications.densenet.preprocess_input, input_shape=input_shape))
   if data_augmentation:
     model.add(layers.RandomFlip(mode="horizontal_and_vertical"))
     model.add(layers.RandomRotation(1.0))
   if pretrained_weights:
+    model.add(layers.Lambda(tensorflow.keras.applications.densenet.preprocess_input, input_shape=input_shape))
     densenet = DenseNet169(include_top=False,input_shape=input_shape, weights='imagenet')
   else:
     densenet = DenseNet169(include_top=False,input_shape=input_shape, weights=None)
