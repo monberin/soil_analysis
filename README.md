@@ -1,4 +1,8 @@
 # Computer Vision System for Soil Sample Evaluation - Appendices
+
+![Project_Poster_Hnatenko](https://github.com/monberin/soil_analysis/assets/56642774/7b226b3e-361a-4dca-ace6-5a452534ec88)
+
+
 ## Structure
 
 ```
