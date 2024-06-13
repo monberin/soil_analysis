@@ -1,0 +1,10 @@
+matplotlib==3.7.1
+numpy==1.25.2
+opencv_contrib_python==4.8.0.76
+opencv_python==4.8.0.76
+opencv_python_headless==4.9.0.80
+pandas==2.0.3
+scikit_image==0.19.3
+scikit_learn==1.2.2
+tensorflow==2.15.0
+xgboost==2.0.3

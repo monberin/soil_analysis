@@ -49,7 +49,7 @@ model_dict = {
 }
 
 
-def run_5fold(model_name, ds_name, i_name, model_dict, splits, X_list, y_list, is_cnn, cnn_build_func=None):
+def run_5fold(model_name, ds_name, i_name, model_dict, splits, X_list, y_list, is_cnn, cnn_build_func=None, data_augmentation=True, pretrained=True):
     """
     Main k-fold validation loop. 
     model_name: string; name of the model used(for hyperparameters and plots)
@@ -60,7 +60,8 @@ def run_5fold(model_name, ds_name, i_name, model_dict, splits, X_list, y_list, i
     X_list: numpy array; array of images
     y_list: numpy array; array of the responce values
     is_cnn: bool; is the model used a CNN or other ML model
-    cnn_build_func: func; build function of the CNN used; None if not a CNN. 
+    cnn_build_func: func; build function of the CNN used; None if not a CNN
+    data_augmentation,pretrained: bool; CNN build parameters
     """
     all_val_preds = []
     all_val_true = []
@@ -76,7 +77,7 @@ def run_5fold(model_name, ds_name, i_name, model_dict, splits, X_list, y_list, i
         y_train = np.take(y_list, train_idx, axis=0)
         X_val = np.take(X_list, test_idx, axis=0)
         y_val = np.take(y_list, test_idx, axis=0)
-        # standardising the responce values
+        # standardising the response values
         y_train, y_val = scale_fit_transform(y_train, y_val)
 
         # retrieving the hyperparameters
@@ -84,7 +85,7 @@ def run_5fold(model_name, ds_name, i_name, model_dict, splits, X_list, y_list, i
         # if CNN, build the model with the hyperparameters, fit, and plot metrics
         if is_cnn:
             model = cnn_build_func(
-                params['input_shape'], params['dense_units'], params['dropout'], params['learning_rate'])
+                params['input_shape'], params['dense_units'], params['dropout'], params['learning_rate'],data_augmentation,pretrained)
             h = model.fit(X_train, y_train, epochs=20,
                           batch_size=32, validation_data=(X_val, y_val))
             plot_metrics(h, ['loss', 'root_mean_squared_error', 'mean_absolute_error'],

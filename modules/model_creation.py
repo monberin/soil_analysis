@@ -163,7 +163,7 @@ def build_inception(input_shape, dense_units, dropout, learning_rate, data_augme
 
 def build_densenet(input_shape, dense_units, dropout, learning_rate, data_augmentation=True, pretrained_weights=True):
     """
-    InceptionV3-based regression model with no top and GlobalAveragePooling2D, Dense and Dropout layers added;
+    DenseNet169-based regression model with no top and GlobalAveragePooling2D, Dense and Dropout layers added;
     If pretrained_weights=True, pretrained weights are set to untrainable;
     If pretrained_weights=False initialised with random weights, all trainable.
     Adam optimizer, MSE loss, metrics: MAE,RMSE.

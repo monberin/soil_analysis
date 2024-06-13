@@ -293,3 +293,43 @@ def get_feature_vectors(all_images):
         feature_vectors.append(vec)
 
     return feature_vectors
+
+
+def get_feature_vectors_pd(all_images):
+    """
+    Function for the Petri Dishes dataset (includes shape features)
+    This function iterates over a list of images, returns a list of vectors that consist of all extracted features
+    all_images: list
+    """
+    feature_vectors = []
+
+    for curr_img in all_images:
+        # extracting contours, their perimeters and areas
+        curr_contours,curr_perimeters,curr_areas = get_image_contours(curr_img)
+        curr_aspects,curr_extents,curr_solidities,curr_diameters = get_shape_features(curr_contours)
+
+        # extracting local binary patterns
+        lbp_dist = get_lbp(curr_img,curr_contours)
+
+        # transforming the features into probability distributions
+        perimeter_dist = get_distribution(curr_perimeters,50)
+        area_dist = get_distribution(curr_areas,50)
+        aspect_dist = get_distribution(curr_aspects,50)
+        extent_dist = get_distribution(curr_extents,50)
+        solidity_dist = get_distribution(curr_solidities,50)
+
+        vec = lbp_dist.tolist() + perimeter_dist.tolist() + area_dist.tolist() + aspect_dist.tolist() + extent_dist.tolist() + \
+            solidity_dist.tolist()
+        
+        # extracting Haralick features from gl comatrices with different angles/distances
+        angles=[0, np.pi/4, np.pi/2, 3*np.pi/4]
+        for i in range(1,6):
+            for angle in angles:
+            contrast,dissimiliarity,homogeneity,energy,correlation = get_glcmprops(curr_img,curr_contours,i,angle)
+
+            vec += contrast.flatten().tolist() + dissimiliarity.flatten().tolist() + \
+            homogeneity.flatten().tolist() + energy.flatten().tolist() + correlation.flatten().tolist()
+
+        feature_vectors.append(vec)
+    
+    return feature_vectors
